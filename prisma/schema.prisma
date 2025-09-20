@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String     @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  latitude      Float?
+  longitude     Float?
+  city          String?
+  country       String?
+  accounts      Account[]
+  sessions      Session[]
+  donations     Donation[]
+  ngo           NGO?
+}
+
+model NGO {
+  id          String     @id @default(cuid())
+  name        String
+  email       String     @unique
+  description String?
+  address     String?
+  phone       String?
+  website     String?
+  latitude    Float
+  longitude   Float
+  city        String     @default("Mumbai")
+  adminId     String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  donations   Donation[]
+  admin       User       @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@map("ngos")
+}
+
+model Donation {
+  id            String         @id @default(cuid())
+  userId        String
+  donationType  DonationType   @default(ITEMS)
+  itemName      String
+  quantity      Int
+  description   String
+  amount        Float?
+  status        DonationStatus @default(PENDING)
+  adminNotes    String?
+  ngoId         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  needsPickup   Boolean        @default(false)
+  pickupDate    DateTime?
+  pickupTime    String?
+  pickupAddress String?
+  pickupNotes   String?
+  pickupStatus  PickupStatus   @default(NOT_REQUIRED)
+  ngo           NGO?           @relation(fields: [ngoId], references: [id])
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("donations")
+}
+
+model VerificationToken {
+  id         String   @id @default(cuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum DonationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DonationType {
+  MONEY
+  ITEMS
+}
+
+enum PickupStatus {
+  NOT_REQUIRED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
