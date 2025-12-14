@@ -49,7 +49,7 @@ export function HeroSection() {
             Empowering Communities, <span className="text-primary">Changing Lives</span>
           </h1>
           <p className="text-xl text-muted-foreground text-pretty mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-            Join us in creating lasting impact through community-driven projects that address real needs and build
+            Join us in creating lasting impact through community-driven initiatives that address real needs and build
             sustainable futures.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400">
@@ -62,7 +62,7 @@ export function HeroSection() {
               asChild
               className="smooth-hover hover:scale-105 hover:shadow-md bg-transparent"
             >
-              <Link href="/projects">View Our Projects</Link>
+              <Link href="/about">Learn More</Link>
             </Button>
           </div>
         </div>

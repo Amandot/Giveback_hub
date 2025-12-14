@@ -58,7 +58,7 @@ export function DashboardNav() {
   const navigationItems = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/donate", label: "Donate", icon: Heart },
-    { href: "/projects", label: "Projects", icon: Users },
+
     { href: "/map", label: "Find NGOs", icon: MapPin },
     ...(isAdmin ? [
       { href: "/admin", label: "Admin Panel", icon: UserCheck },

@@ -9,13 +9,13 @@ export function ImpactStats() {
     },
     {
       number: "15",
-      label: "Active Projects",
-      description: "Ongoing initiatives across regions",
+      label: "Partner NGOs",
+      description: "Verified organizations across regions",
     },
     {
       number: "85%",
       label: "Funds to Programs",
-      description: "Direct allocation to community projects",
+      description: "Direct allocation to community programs",
     },
     {
       number: "50+",

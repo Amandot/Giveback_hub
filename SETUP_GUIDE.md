@@ -1,276 +1,383 @@
-# GiveBack Hub - Complete Setup Guide
+# 🌟 GiveBack Hub - Complete Setup & Configuration Guide
 
-## 🚀 New Features Implemented
+## 🎯 Project Overview
 
-### 1. **Separate User & Admin Authentication**
-- **Users**: Login at `/auth/user-login` with Google OAuth or email/password
-- **Admins**: Login at `/auth/admin-login` with email/password only
-- Role-based redirects: Users → `/dashboard`, Admins → `/admin/dashboard`
+GiveBack Hub is a modern, full-stack donation platform that connects generous donors with verified NGOs through seamless donation management, interactive maps, and comprehensive administrative tools.
 
-### 2. **Donation Management System**
-- Users can submit item donations at `/donate`
-- Donations are saved with status: `PENDING`, `APPROVED`, `REJECTED`
-- Admin receives email notification for new donations
+### ✨ Key Features
+- 🗺️ **Interactive Map-Based NGO Discovery**
+- 💝 **Flexible Donation System** (Money & Items)
+- 🚚 **Advanced Pickup Service** with scheduling & tracking
+- 🛡️ **Comprehensive Admin Dashboard**
+- 🔐 **Secure Multi-Provider Authentication**
+- 📱 **Fully Responsive Design**
+- ✨ **Smooth Animations** with GSAP & Barba.js
+- 🎨 **Modern UI/UX** with Tailwind CSS
+- 🔑 **Emergency Admin Access** with secret key system
 
-### 3. **Email Notifications**
-- **Admin Notification**: When donation is submitted
-- **Donor Confirmation**: When donation status is updated
-- Uses Nodemailer with Gmail SMTP
+## 🚀 Quick Start Installation
 
-### 4. **Admin Dashboard**
-- View all donations in a table
-- Approve/Reject pending donations
-- Statistics and metrics display
-- Real-time status updates
+### Prerequisites
+- Node.js 18+ and npm
+- Git
+- Google account (for OAuth setup)
 
-### 5. **Role-Based Route Protection**
-- Middleware automatically redirects based on user roles
-- Protected routes: `/admin/*` (admin only), `/dashboard` (user only), `/donate` (user only)
+### Step 1: Clone & Install
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd giveback-hub
 
-## 📋 Setup Instructions
+# Install dependencies
+npm install
+```
 
-### Step 1: Environment Variables
-Update your `.env.local` file with the following:
+### Step 2: Environment Configuration
+Create a `.env.local` file in the project root:
 
 ```env
-# Google OAuth Credentials
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
+# Database
+DATABASE_URL="file:./dev.db"
 
-# NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-nextauth-secret
+# NextAuth.js
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-nextauth-secret-here"
 
-# Database Configuration
-DATABASE_URL="mongodb://localhost:27017/giveback-hub"
-# OR use MongoDB Atlas:
-# DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/giveback-hub"
+# Google OAuth (optional - can be configured later)
+GOOGLE_CLIENT_ID="your-google-client-id-here"
+GOOGLE_CLIENT_SECRET="your-google-client-secret-here"
 
-# Email Configuration (Gmail)
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-gmail-app-password
-ADMIN_EMAIL=admin@givebackhub.org
+# Email (optional - can be configured later)
+EMAIL_SERVER_HOST="smtp.gmail.com"
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER="your-email@gmail.com"
+EMAIL_SERVER_PASSWORD="your-app-password"
+EMAIL_FROM="your-email@gmail.com"
 
-# Admin Creation Secret
-ADMIN_CREATION_SECRET=your-secret-key-here
+# Admin Secret Key for Emergency Access
+ADMIN_SECRET_KEY="GIVEBACK_ADMIN_2024_SECRET"
 ```
-
-### Step 2: Gmail App Password Setup
-1. Go to Google Account Settings → Security
-2. Enable 2-Factor Authentication
-3. Generate an App Password for "Mail"
-4. Use this password in `EMAIL_PASS` (not your regular Gmail password)
 
 ### Step 3: Database Setup
-
-#### Option A: Local MongoDB
 ```bash
-# Install MongoDB locally
-# On Windows with chocolatey:
-choco install mongodb
-
-# Start MongoDB service
-mongod
-
-# The DATABASE_URL should be: mongodb://localhost:27017/giveback-hub
-```
-
-#### Option B: MongoDB Atlas (Cloud)
-1. Create free account at https://mongodb.com/atlas
-2. Create cluster and database
-3. Get connection string and update `DATABASE_URL`
-
-### Step 4: Install Dependencies & Initialize
-```bash
-# Install all dependencies
-npm install
-
 # Generate Prisma client
 npx prisma generate
 
-# Push database schema
+# Initialize database
 npx prisma db push
-
-# Run setup script to create admin user
-node scripts/setup.js
 ```
 
-### Step 5: Run the Application
+### Step 4: Start Development Server
 ```bash
 npm run dev
 ```
 
-Visit http://localhost:3000
+Visit **http://localhost:3000** to see your application!
 
-## 🔐 Default Credentials
+## 🔐 Authentication & Access
 
-**Admin Login**: http://localhost:3000/auth/admin-login
-- **Email**: admin@givebackhub.org
-- **Password**: admin123456
+### Emergency Admin Access (Recommended for First Setup)
+- **URL**: http://localhost:3000/auth/admin-secret
+- **Secret Key**: `GIVEBACK_ADMIN_2024_SECRET` (from .env.local)
+- **Process**: Enter secret key + email + name to create admin account
+- **Default Password**: `admin123` (change after first login)
 
-**User Login**: http://localhost:3000/auth/user-login
-- Use Google Sign-in or create account with email/password
+### Regular Admin Login
+- **URL**: http://localhost:3000/auth/admin-login
+- **Use**: Email and password credentials
 
-## 📁 Project Structure
+### User Access
+- **Google OAuth**: http://localhost:3000/auth/user-login
+- **Credentials**: Email and password (if registered)
 
+### NGO Registration
+- **URL**: http://localhost:3000/admin-signup
+- **Requirements**: Valid NGO information and location
+
+## 🔧 Google OAuth Setup (Optional)
+
+### Step 1: Create Google Cloud Project
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create new project: "GiveBack Hub"
+3. Enable Google+ API or Google Identity services
+
+### Step 2: Create OAuth Credentials
+1. Go to "APIs & Services" → "Credentials"
+2. Create "OAuth 2.0 Client ID"
+3. Configure OAuth consent screen
+4. Set application type to "Web application"
+5. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+
+### Step 3: Update Environment Variables
+Replace placeholders in `.env.local`:
+```env
+GOOGLE_CLIENT_ID="your-actual-client-id"
+GOOGLE_CLIENT_SECRET="your-actual-client-secret"
+```
+
+### Step 4: Test OAuth
+1. Restart development server
+2. Visit user login page
+3. Test "Sign in with Google" button
+
+## 📧 Email Notifications Setup (Optional)
+
+### Step 1: Gmail App Password
+1. Enable 2FA on your Gmail account
+2. Go to [Google App Passwords](https://myaccount.google.com/apppasswords)
+3. Generate app password for "Mail"
+4. Copy the 16-character password
+
+### Step 2: Update Email Configuration
+```env
+EMAIL_SERVER_USER="your-gmail@gmail.com"
+EMAIL_SERVER_PASSWORD="your-16-char-app-password"
+EMAIL_FROM="your-gmail@gmail.com"
+```
+
+### Step 3: Test Email System
+- Submit a donation as a user
+- Approve/reject it as an admin
+- Check if user receives email notification
+
+## 🏗️ Project Architecture
+
+### Technology Stack
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS + Radix UI Components
+- **Animations**: GSAP + Barba.js + Custom CSS
+- **Database**: SQLite (dev) / PostgreSQL (production ready)
+- **ORM**: Prisma 6.16.2
+- **Authentication**: NextAuth.js
+- **Email**: Nodemailer
+
+### Project Structure
 ```
 app/
-├── api/
-│   ├── auth/[...nextauth]/route.ts    # NextAuth configuration
-│   ├── donations/route.ts             # Donation CRUD operations
-│   ├── donations/[id]/route.ts        # Update donation status
-│   └── admin/create-user/route.ts     # Create admin accounts
-├── auth/
-│   ├── user-login/page.tsx            # User login page
-│   └── admin-login/page.tsx           # Admin login page
-├── admin/
-│   └── dashboard/page.tsx             # Admin dashboard
-├── donate/page.tsx                    # Donation form
-├── dashboard/page.tsx                 # User dashboard (existing)
-└── profile/page.tsx                   # User profile (existing)
+├── api/                     # Backend API routes
+│   ├── auth/               # Authentication endpoints
+│   ├── donations/          # Donation management
+│   ├── ngos/              # NGO management
+│   └── admin/             # Admin operations
+├── auth/                   # Authentication pages
+│   ├── user-login/        # User login
+│   ├── admin-login/       # Admin login
+│   └── admin-secret/      # Emergency admin access
+├── admin/                  # Admin dashboard
+├── dashboard/              # User dashboard
+├── donate/                 # Donation pages
+├── map/                    # NGO discovery map
+└── about/                  # About pages
+
+components/                 # Reusable components
+├── ui/                    # Base UI components
+├── navigation.tsx         # Main navigation
+├── scroll-reveal.tsx      # GSAP animations
+└── particle-background.tsx # Interactive background
 
 lib/
-├── prisma.ts                          # Prisma client
-├── mail.ts                            # Email notification system
-└── auth.ts                            # Auth utilities
+├── prisma.ts              # Database client
+├── auth-providers.ts      # Auth configuration
+└── mail.ts               # Email system
 
 prisma/
-└── schema.prisma                      # Database schema
-
-middleware.ts                          # Route protection
+├── schema.prisma          # Database schema
+└── dev.db                # SQLite database
 ```
 
-## 🎯 User Flows
-
-### For Donors (Users)
-1. Visit `/auth/user-login`
-2. Sign in with Google or email/password
-3. Redirected to `/dashboard` (personalized)
-4. Click "Donate Now" or visit `/donate`
-5. Fill donation form (item, quantity, description)
-6. Receive email confirmation when status changes
-
-### For NGO Staff (Admins)
-1. Visit `/auth/admin-login`
-2. Sign in with admin credentials
-3. Redirected to `/admin/dashboard`
-4. View pending donations in table
-5. Click "Approve" or "Reject" buttons
-6. Donor automatically receives email notification
-
-## 🔧 API Endpoints
-
-### Authentication
-- `POST /api/auth/[...nextauth]` - NextAuth handlers
-
-### Donations
-- `GET /api/donations` - Get donations (filtered by role)
-- `POST /api/donations` - Create new donation (user only)
-- `PATCH /api/donations/[id]` - Update donation status (admin only)
-
-### Admin
-- `POST /api/admin/create-user` - Create admin accounts (protected)
-
-## 🛠 Database Schema
-
+### Database Schema
 ```prisma
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  email         String    @unique
+  id            String     @id @default(cuid())
+  email         String     @unique
   name          String?
-  password      String?   // For admin credentials
-  role          Role      @default(USER)
+  password      String?
+  role          Role       @default(USER)
   donations     Donation[]
-  // ... other fields
+  ngo           NGO?
+}
+
+model NGO {
+  id          String     @id @default(cuid())
+  name        String
+  email       String     @unique
+  latitude    Float
+  longitude   Float
+  adminId     String     @unique
+  donations   Donation[]
+  admin       User       @relation(fields: [adminId], references: [id])
 }
 
 model Donation {
-  id          String         @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String         @db.ObjectId
-  itemName    String
-  quantity    Int
-  description String
-  status      DonationStatus @default(PENDING)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  user        User           @relation(fields: [userId], references: [id])
+  id            String         @id @default(cuid())
+  userId        String
+  donationType  DonationType   @default(ITEMS)
+  itemName      String
+  quantity      Int
+  amount        Float?
+  status        DonationStatus @default(PENDING)
+  needsPickup   Boolean        @default(false)
+  pickupDate    DateTime?
+  pickupStatus  PickupStatus   @default(NOT_REQUIRED)
+  user          User           @relation(fields: [userId], references: [id])
+  ngo           NGO?           @relation(fields: [ngoId], references: [id])
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-enum DonationStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
+enum Role { USER, ADMIN }
+enum DonationStatus { PENDING, APPROVED, REJECTED }
+enum DonationType { MONEY, ITEMS }
+enum PickupStatus { NOT_REQUIRED, SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED }
 ```
 
-## 📧 Email Templates
+## 🎨 UI/UX Features
 
-The system sends two types of emails:
+### Modern Animations
+- **GSAP ScrollTrigger**: Smooth scroll-based animations
+- **Barba.js**: Seamless page transitions
+- **Custom CSS**: Hover effects, loading states, micro-interactions
+- **Particle Background**: Interactive floating particles
 
-1. **Admin Notification** - When user submits donation
-2. **Donor Confirmation** - When admin approves/rejects donation
+### Responsive Design
+- Mobile-first approach
+- Touch-friendly interface (44px minimum touch targets)
+- Responsive navigation and layouts
+- Optimized for all screen sizes
 
-Both use HTML templates with proper styling and include relevant information.
-
-## 🔒 Security Features
-
-- **Role-based Authentication**: Separate login flows for users and admins
-- **Route Protection**: Middleware prevents unauthorized access
-- **Password Hashing**: bcrypt with salt rounds
-- **Session Management**: NextAuth handles JWT tokens
-- **Input Validation**: Server-side validation for all forms
+### Accessibility
+- Keyboard navigation support
+- Screen reader friendly
+- High contrast ratios
+- Focus indicators
+- ARIA labels and descriptions
 
 ## 🚀 Production Deployment
 
 ### Environment Variables for Production
 ```env
-NEXTAUTH_URL=https://your-domain.com
-DATABASE_URL="your-production-mongodb-url"
-EMAIL_USER=your-production-email
-EMAIL_PASS=your-production-email-password
-ADMIN_EMAIL=admin@your-domain.com
-NEXTAUTH_SECRET="your-strong-secret-key"
-ADMIN_CREATION_SECRET="your-admin-creation-secret"
+# Update these for production
+NEXTAUTH_URL="https://your-domain.com"
+DATABASE_URL="your-production-database-url"
+NEXTAUTH_SECRET="your-strong-production-secret"
+ADMIN_SECRET_KEY="your-production-admin-secret"
+
+# Production email settings
+EMAIL_SERVER_USER="your-production-email"
+EMAIL_SERVER_PASSWORD="your-production-password"
+
+# Production OAuth credentials
+GOOGLE_CLIENT_ID="your-production-client-id"
+GOOGLE_CLIENT_SECRET="your-production-client-secret"
 ```
 
 ### Deployment Steps
-1. Update environment variables
-2. Run `npx prisma generate`
-3. Run `npx prisma db push`
-4. Deploy to Vercel, Netlify, or your preferred platform
+1. **Prepare Database**: Set up PostgreSQL or MongoDB for production
+2. **Update Environment**: Configure all production environment variables
+3. **Build Application**: Run `npm run build`
+4. **Deploy**: Use Vercel, Netlify, or your preferred platform
+5. **Database Migration**: Run `npx prisma db push` in production
+6. **Test**: Verify all features work in production environment
 
-## 📞 Support
+### Recommended Platforms
+- **Vercel**: Seamless Next.js deployment
+- **Netlify**: Easy static site deployment
+- **Railway**: Full-stack deployment with database
+- **Heroku**: Traditional platform-as-a-service
 
-For issues or questions:
-1. Check the console for error messages
-2. Verify all environment variables are set correctly
-3. Ensure database is running and accessible
-4. Check email configuration if notifications aren't working
-
-## 🔄 Development Commands
+## 🔧 Development Commands
 
 ```bash
-# Install dependencies
-npm install
+# Development
+npm run dev                 # Start development server
+npm run build              # Build for production
+npm run start              # Start production server
+npm run lint               # Run ESLint
 
-# Run development server
-npm run dev
+# Database
+npx prisma generate        # Generate Prisma client
+npx prisma db push         # Push schema to database
+npx prisma studio          # Open database browser
+npx prisma db seed         # Seed database (if configured)
 
-# Database commands
-npx prisma generate          # Generate Prisma client
-npx prisma db push          # Push schema to database
-npx prisma studio           # Open database browser
-
-# Create admin user
-node scripts/setup.js
-
-# Reset database (caution!)
-npx prisma db push --force-reset
+# Utilities
+npm run type-check         # Check TypeScript types
+npm audit                  # Check for vulnerabilities
+npm update                 # Update dependencies
 ```
 
-This completes the comprehensive donation management system with role-based authentication, email notifications, and admin dashboard! 🎉
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Port Already in Use**
+```bash
+# Find process using port 3000
+netstat -ano | findstr :3000
+# Kill the process (Windows)
+taskkill /F /PID [PID_NUMBER]
+```
+
+**Database Connection Issues**
+- Ensure SQLite file permissions are correct
+- Check DATABASE_URL format
+- Run `npx prisma db push` to sync schema
+
+**Google OAuth Errors**
+- Verify redirect URI matches exactly
+- Check client ID and secret are correct
+- Ensure OAuth consent screen is configured
+
+**Email Not Working**
+- Verify Gmail app password (not regular password)
+- Check 2FA is enabled on Gmail account
+- Confirm SMTP settings are correct
+
+**Build Errors**
+- Clear `.next` folder: `rm -rf .next`
+- Clear node_modules: `rm -rf node_modules && npm install`
+- Check TypeScript errors: `npm run type-check`
+
+### Getting Help
+1. Check browser console for client-side errors
+2. Check terminal/server logs for backend errors
+3. Verify all environment variables are set
+4. Test with minimal configuration first
+5. Check GitHub issues or create new one
+
+## 📈 Future Enhancements
+
+### Planned Features
+- 💳 **Payment Gateway Integration** (Stripe, Razorpay)
+- 🔔 **Real-time Notifications** with WebSockets
+- 📱 **Native Mobile App** (React Native)
+- 📊 **Advanced Analytics** with charts and insights
+- 🌍 **Multi-language Support** (i18n)
+- 🤖 **AI-powered NGO Recommendations**
+- 📧 **Advanced Email Templates**
+- 🔍 **Enhanced Search & Filtering**
+
+### Contributing
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open Pull Request
+
+## 📞 Support & Community
+
+### Resources
+- **Documentation**: This setup guide
+- **Issues**: GitHub Issues page
+- **Discussions**: GitHub Discussions
+- **Email**: support@givebackhub.com (if configured)
+
+### Security
+- Report security issues privately
+- Follow responsible disclosure
+- Keep dependencies updated
+- Use strong passwords and secrets
+
+---
+
+**🎉 Congratulations! Your GiveBack Hub platform is now ready to make a positive impact in your community!**
+
+*This comprehensive setup guide covers everything needed to get your donation platform running smoothly. For additional help, refer to the troubleshooting section or reach out to the community.*

@@ -30,10 +30,7 @@ export function Navigation() {
                 About
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/projects" className="text-foreground hover:text-primary smooth-hover relative group">
-                Projects
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </Link>
+
               <Link href="/services" className="text-foreground hover:text-primary smooth-hover relative group">
                 Services
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -80,13 +77,7 @@ export function Navigation() {
             >
               About
             </Link>
-            <Link
-              href="/projects"
-              className="block px-3 py-2 text-foreground hover:text-primary smooth-hover hover:bg-accent rounded-md"
-              onClick={() => setIsOpen(false)}
-            >
-              Projects
-            </Link>
+
             <Link
               href="/services"
               className="block px-3 py-2 text-foreground hover:text-primary smooth-hover hover:bg-accent rounded-md"

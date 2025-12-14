@@ -10,7 +10,7 @@ export default function AboutPage() {
     {
       title: "Community-Led",
       description:
-        "Our projects are designed and implemented with direct input from the communities we serve, ensuring sustainable solutions.",
+        "Our initiatives are designed and implemented with direct input from the communities we serve, ensuring sustainable solutions.",
     },
     {
       title: "Measurable Impact",
@@ -33,7 +33,7 @@ export default function AboutPage() {
     {
       name: "Arjun Patel",
       role: "Program Manager",
-      bio: "Former Peace Corps volunteer with expertise in water and sanitation projects.",
+      bio: "Former Peace Corps volunteer with expertise in water and sanitation programs.",
     },
     {
       name: "Kavya Reddy",
@@ -64,7 +64,7 @@ export default function AboutPage() {
                 solutions that create lasting positive impact.
               </p>
               <p className="text-muted-foreground mb-4">
-                Through collaborative projects in education, healthcare, clean water, and economic development, we work
+                Through collaborative initiatives in education, healthcare, clean water, and economic development, we work
                 to break cycles of poverty and build resilient communities.
               </p>
               <p className="text-muted-foreground">

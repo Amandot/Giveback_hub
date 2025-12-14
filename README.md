@@ -1,4 +1,4 @@
-# 🌟 NGO Donation Platform - GiveBack Hub
+# 🌟 GiveBack Hub - Community Donation Platform
 
 *A comprehensive platform connecting donors with NGOs through geographic discovery and seamless donation management*
 
@@ -6,18 +6,22 @@
 [![Powered by Prisma](https://img.shields.io/badge/Powered%20by-Prisma-2D3748?style=for-the-badge&logo=prisma)](https://prisma.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white)](https://greensock.com/)
 
 ## 🎯 Project Overview
 
-A modern, full-stack NGO donation platform that enables seamless connections between donors and non-governmental organizations. The platform features geographic NGO discovery, comprehensive donation management, **advanced pickup services**, and powerful administrative tools.
+GiveBack Hub is a cutting-edge donation platform that bridges the gap between compassionate donors and impactful NGOs. Built with modern web technologies, it features smooth animations, interactive maps, comprehensive donation management, and powerful administrative tools.
 
 ### ✨ Key Highlights
-- 🗺️ **Interactive Map-Based NGO Discovery**
-- 💝 **Flexible Donation System** (Money & Items)
-- 🚚 **Advanced Pickup Service** with scheduling & tracking
-- 🛡️ **Comprehensive Admin Dashboard**
+- �️ *c*Interactive Map-Based NGO Discovery**
+- � **dFlexible Donation System** (Money & Items)
+- � **Adveanced Pickup Service** with scheduling & tracking
+- �*️ **Comprehensive Admin Dashboard**
 - 🔐 **Secure Multi-Provider Authentication**
 - 📱 **Fully Responsive Design**
+- ✨ **Smooth Animations** with GSAP & Barba.js
+- 🎨 **Modern UI/UX** with Tailwind CSS
+- 🔑 **Emergency Admin Access** with secret key system
 
 ---
 
@@ -29,7 +33,8 @@ A modern, full-stack NGO donation platform that enables seamless connections bet
 - **UI Library:** React 18
 - **Styling:** Tailwind CSS + Radix UI Components
 - **Maps:** Google Maps API Integration
-- **Animations:** GSAP + CSS Animations
+- **Animations:** GSAP + Barba.js + Custom CSS Animations
+- **Smooth Scrolling:** Native CSS + GSAP ScrollTrigger
 
 ### **Backend**
 - **API:** Next.js API Routes
@@ -56,6 +61,8 @@ A modern, full-stack NGO donation platform that enables seamless connections bet
 - Credential-based login for administrators
 - Role-based access control (USER vs ADMIN)
 - Secure session management
+- **Emergency admin access** with secret key system
+- Password hashing with bcryptjs
 
 #### **👤 User Profiles**
 - Profile management with location tracking
@@ -135,7 +142,7 @@ A modern, full-stack NGO donation platform that enables seamless connections bet
 ## 💻 Project Structure
 
 ```
-ngo/
+giveback-hub/
 ├── app/                  # Next.js App Router
 │   ├── admin/           # Admin dashboard
 │   ├── admin-signup/    # NGO registration
@@ -146,6 +153,7 @@ ngo/
 │   ├── map/             # NGO map discovery
 │   └── page.tsx         # Landing page
 ├── components/          # Reusable components
+│   ├── ui/             # Base UI components
 │   ├── google-map.tsx   # Map component
 │   ├── donation-form.tsx # Donation form
 │   └── ...
@@ -169,8 +177,8 @@ ngo/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/ngo-donation-platform.git
-   cd ngo-donation-platform
+   git clone https://github.com/your-username/giveback-hub.git
+   cd giveback-hub
    ```
 
 2. **Install dependencies**
@@ -180,21 +188,33 @@ ngo/
 
 3. **Set up environment variables**
    Create a `.env.local` file with:
-   ```
-   NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=your-secret-key
-   DATABASE_URL=file:./dev.db
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
-   ADMIN_SECRET_KEY=SECURE_ADMIN_KEY_2024_NGO
-   EMAIL_USER=your-email@example.com
-   EMAIL_PASS=your-email-password
+   ```env
+   # Database
+   DATABASE_URL="file:./dev.db"
+
+   # NextAuth.js
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-nextauth-secret-here"
+
+   # Google OAuth (optional - can be configured later)
+   GOOGLE_CLIENT_ID="your-google-client-id-here"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret-here"
+
+   # Email (optional - can be configured later)
+   EMAIL_SERVER_HOST="smtp.gmail.com"
+   EMAIL_SERVER_PORT=587
+   EMAIL_SERVER_USER="your-email@gmail.com"
+   EMAIL_SERVER_PASSWORD="your-app-password"
+   EMAIL_FROM="your-email@gmail.com"
+
+   # Admin Secret Key for Emergency Access
+   ADMIN_SECRET_KEY="GIVEBACK_ADMIN_2024_SECRET"
    ```
 
 4. **Initialize the database**
    ```bash
-   npx prisma migrate dev
+   npx prisma generate
+   npx prisma db push
    ```
 
 5. **Start the development server**
@@ -209,30 +229,49 @@ ngo/
 
 ## 🔐 Admin Access & Registration
 
-### **Default Admin Credentials**
-For immediate access to the admin dashboard:
+### **Emergency Admin Access (New Feature)**
+Create admin accounts instantly with the secret key system:
+- **URL**: http://localhost:3000/auth/admin-secret
+- **Secret Key**: `GIVEBACK_ADMIN_2024_SECRET` (from .env.local)
+- **Process**: Enter secret key + email + name to create admin account
+- **Default Password**: `admin123` (change after first login)
+
+### **Regular Admin Login**
+For existing admin accounts:
 - **URL**: http://localhost:3000/auth/admin-login
-- **Email**: `admin@givebackhub.org`
-- **Password**: `admin123456`
+- **Use**: Email and password credentials
 
-### **NGO Registration Key**
-To register new NGOs and create additional admin accounts:
-- **Registration URL**: http://localhost:3000/admin-signup
-- **Admin Registration Key**: `SECURE_ADMIN_KEY_2024_NGO`
-
-> **Security Note**: Change the default admin password and registration key in production environments.
+### **NGO Registration**
+To register new NGOs:
+- **URL**: http://localhost:3000/admin-signup
+- **Requirements**: Valid NGO information and location
 
 ### **User Access**
-Regular users can sign in with Google OAuth at:
-- **URL**: http://localhost:3000/auth/user-login
+Regular users can sign in with:
+- **Google OAuth**: http://localhost:3000/auth/user-login
+- **Credentials**: Email and password (if registered)
+
+> **Security Note**: Always change default passwords and update secret keys in production environments.
 
 ---
 
 ## 🗄️ Recent Enhancements
 
-### **🚚 Pickup Service Feature (Latest Addition)**
+### **✨ UI/UX Improvements (Latest Update)**
 
-We recently implemented a comprehensive pickup service system for item donations:
+- **Enhanced Animations**: Integrated GSAP and Barba.js for smooth page transitions
+- **Smooth Scrolling**: Native CSS smooth scrolling with GSAP ScrollTrigger
+- **Modern Design**: Updated Tailwind CSS with custom animations and effects
+- **Interactive Elements**: Hover effects, loading states, and micro-interactions
+- **Accessibility**: Improved focus states and mobile touch targets
+
+### **🔑 Emergency Admin Access System**
+
+- **Secret Key Login**: Instant admin account creation with secure key
+- **Flexible Authentication**: Multiple ways to access admin features
+- **Security Enhanced**: Proper password hashing and session management
+
+### **🚚 Pickup Service Feature**
 
 - Added pickup scheduling with date/time selection
 - Integrated address specification and special instructions
@@ -240,35 +279,337 @@ We recently implemented a comprehensive pickup service system for item donations
 - Enhanced admin dashboard with pickup management
 - Added urgent notification system for pending pickups
 
-### **📱 Responsive Design Improvements**
+### **📱 Responsive Design**
 
-- Enhanced mobile experience
+- Enhanced mobile experience across all devices
 - Improved map interactions on small screens
-- Streamlined donation process on all devices
+- Streamlined donation process with better UX
+
+---
+
+## 🎯 User Flows
+
+### **For Donors (Users)**
+1. Visit `/auth/user-login`
+2. Sign in with Google or email/password
+3. Redirected to `/dashboard` (personalized)
+4. Click "Donate Now" or visit `/donate`
+5. Fill donation form (item, quantity, description)
+6. Receive email confirmation when status changes
+
+### **For NGO Staff (Admins)**
+1. Visit `/auth/admin-login`
+2. Sign in with admin credentials
+3. Redirected to `/admin/dashboard`
+4. View pending donations in table
+5. Click "Approve" or "Reject" buttons
+6. Donor automatically receives email notification
+
+---
+
+## 🔧 API Endpoints
+
+### **Authentication**
+- `POST /api/auth/[...nextauth]` - NextAuth handlers
+- `POST /api/auth/admin-secret` - Emergency admin creation
+
+### **Donations**
+- `GET /api/donations` - Get donations (filtered by role)
+- `POST /api/donations` - Create new donation (user only)
+- `PATCH /api/donations/[id]` - Update donation status (admin only)
+
+### **NGOs**
+- `GET /api/ngos` - Get NGO list
+- `POST /api/ngos` - Create NGO (admin only)
+- `PATCH /api/ngos/[id]` - Update NGO (admin only)
+
+### **Admin**
+- `POST /api/admin/create-user` - Create admin accounts (protected)
+
+---
+
+## 🛠 Database Schema
+
+```prisma
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  name          String?
+  password      String?
+  role          Role       @default(USER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  latitude      Float?
+  longitude     Float?
+  city          String?
+  country       String?
+  accounts      Account[]
+  sessions      Session[]
+  donations     Donation[]
+  ngo           NGO?
+}
+
+model NGO {
+  id          String     @id @default(cuid())
+  name        String
+  email       String     @unique
+  description String?
+  address     String?
+  phone       String?
+  website     String?
+  latitude    Float
+  longitude   Float
+  city        String     @default("Mumbai")
+  adminId     String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  donations   Donation[]
+  admin       User       @relation(fields: [adminId], references: [id])
+}
+
+model Donation {
+  id            String         @id @default(cuid())
+  userId        String
+  donationType  DonationType   @default(ITEMS)
+  itemName      String
+  quantity      Int
+  description   String
+  amount        Float?
+  status        DonationStatus @default(PENDING)
+  adminNotes    String?
+  ngoId         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  needsPickup   Boolean        @default(false)
+  pickupDate    DateTime?
+  pickupTime    String?
+  pickupAddress String?
+  pickupNotes   String?
+  pickupStatus  PickupStatus   @default(NOT_REQUIRED)
+  ngo           NGO?           @relation(fields: [ngoId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum DonationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DonationType {
+  MONEY
+  ITEMS
+}
+
+enum PickupStatus {
+  NOT_REQUIRED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+```
 
 ---
 
 ## 📈 Future Roadmap
 
-- Payment gateway integration
-- Real-time notifications with WebSockets
-- Native mobile application
-- Advanced analytics dashboard
-- Multi-language support
-- Social media integration
+- 💳 **Payment Gateway Integration** (Stripe, Razorpay)
+- 🔔 **Real-time Notifications** with WebSockets
+- 📱 **Native Mobile Application** (React Native)
+- 📊 **Advanced Analytics Dashboard** with charts and insights
+- 🌍 **Multi-language Support** (i18n)
+- 📱 **Social Media Integration** for sharing donations
+- 🤖 **AI-powered NGO Recommendations**
+- 📧 **Advanced Email Templates** and notifications
+- 🔍 **Advanced Search & Filtering** for NGOs and donations
+- 📈 **Impact Tracking** and reporting system
 
 ---
 
-## 📁 License
+## 🔒 Security Features
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- **Role-based Authentication**: Separate login flows for users and admins
+- **Route Protection**: Middleware prevents unauthorized access
+- **Password Hashing**: bcrypt with salt rounds
+- **Session Management**: NextAuth handles JWT tokens
+- **Input Validation**: Server-side validation for all forms
+- **Emergency Access**: Secure admin creation with secret keys
+- **CSRF Protection**: Built-in NextAuth CSRF protection
+
+---
+
+## 🚀 Production Deployment
+
+### **Environment Variables for Production**
+```env
+NEXTAUTH_URL=https://your-domain.com
+DATABASE_URL="your-production-database-url"
+EMAIL_SERVER_USER=your-production-email
+EMAIL_SERVER_PASSWORD=your-production-email-password
+NEXTAUTH_SECRET="your-strong-secret-key"
+ADMIN_SECRET_KEY="your-admin-creation-secret"
+```
+
+### **Deployment Steps**
+1. Update environment variables
+2. Run `npx prisma generate`
+3. Run `npx prisma db push`
+4. Deploy to Vercel, Netlify, or your preferred platform
+
+---
+
+## 📞 Support
+
+For issues or questions:
+1. Check the console for error messages
+2. Verify all environment variables are set correctly
+3. Ensure database is running and accessible
+4. Check email configuration if notifications aren't working
+
+---
+
+## 🔄 Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Database commands
+npx prisma generate          # Generate Prisma client
+npx prisma db push          # Push schema to database
+npx prisma studio           # Open database browser
+
+# Build for production
+npm run build
+npm run start
+
+# Linting and type checking
+npm run lint
+npm run type-check
+
+# Reset database (caution!)
+npx prisma db push --force-reset
+```
+
+---
+
+## 📚 Additional Resources
+
+### **Documentation**
+📖 **[Complete Setup Guide](./SETUP_GUIDE.md)** - Comprehensive installation and configuration
+
+### **Key Pages**
+- **Homepage**: http://localhost:3000
+- **User Login**: http://localhost:3000/auth/user-login
+- **Admin Login**: http://localhost:3000/auth/admin-login
+- **Emergency Admin**: http://localhost:3000/auth/admin-secret
+- **NGO Registration**: http://localhost:3000/admin-signup
+- **Donation Page**: http://localhost:3000/donate
+- **User Dashboard**: http://localhost:3000/dashboard
+- **Admin Dashboard**: http://localhost:3000/admin
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create your feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit your changes**: `git commit -m 'Add amazing feature'`
+4. **Push to the branch**: `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
+
+### **Development Guidelines**
+- Follow TypeScript best practices
+- Use Tailwind CSS for styling
+- Write meaningful commit messages
+- Test your changes thoroughly
+- Update documentation as needed
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 👏 Acknowledgements
 
-- Next.js team for the amazing framework
-- Prisma team for the excellent ORM
-- Tailwind CSS for the styling system
-- Google Maps Platform for location services
-- All the NGOs that inspired this project
+- **Next.js** team for the amazing framework
+- **Prisma** team for the excellent ORM
+- **Tailwind CSS** for the styling system
+- **Radix UI** for accessible components
+- **GSAP** for smooth animations
+- **Google Maps Platform** for location services
+- All the **NGOs** and **communities** that inspired this project
+
+---
+
+<div align="center">
+
+**🌟 Built with ❤️ for making a positive impact in communities worldwide 🌟**
+
+[⭐ Star this repo](../../stargazers) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues) • [📖 Documentation](./SETUP_GUIDE.md)
+
+</div>
+
+---
+
+## 🚀 Deployment
+
+### **Vercel Deployment (Recommended)**
+
+This project is optimized for Vercel deployment with zero configuration:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/giveback-hub)
+
+**📖 Complete Deployment Guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step instructions.
+
+### **Quick Deploy Steps:**
+1. **Fork/Clone** this repository
+2. **Connect** to Vercel via GitHub
+3. **Add Environment Variables** (see `.env.example`)
+4. **Deploy** - Vercel handles the rest!
+
+### **Production Requirements:**
+- **Database:** PostgreSQL (Vercel Postgres recommended)
+- **Environment Variables:** All variables from `.env.example`
+- **Google Maps API Key:** Required for map functionality
+- **Domain:** Custom domain supported
+
+### **Post-Deployment:**
+1. Set up Vercel Postgres database
+2. Run database migrations
+3. Create admin account via `/auth/admin-secret`
+4. Register first NGO via `/admin-signup`
+
+---
+
+## 🌟 Live Features
+
+Once deployed, your platform will include:
+
+- **🏠 Landing Page** - Modern hero section with smooth animations
+- **🗺️ Interactive Map** - Discover NGOs by location
+- **💝 Donation System** - Support NGOs with money or items
+- **🚚 Pickup Service** - Schedule item pickups with tracking
+- **👥 User Dashboard** - Track donations and impact
+- **📊 Admin Dashboard** - Comprehensive management tools
+- **🏢 NGO Management** - Complete NGO administration
+- **🔐 Secure Authentication** - Multiple login options
+- **📱 Mobile Responsive** - Perfect on all devices
+
+---
+
+*Ready to make a difference? Deploy your GiveBack Hub today!* 🚀

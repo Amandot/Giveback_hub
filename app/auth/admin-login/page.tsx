@@ -211,6 +211,13 @@ export default function AdminLoginPage() {
             </Link>
             <span className="text-gray-300">•</span>
             <Link 
+              href="/auth/admin-secret" 
+              className="text-sm text-red-600 hover:text-red-500 font-medium hover:underline transition-colors"
+            >
+              Emergency Access
+            </Link>
+            <span className="text-gray-300">•</span>
+            <Link 
               href="/auth/user-login" 
               className="text-sm text-blue-600 hover:text-blue-500 font-medium hover:underline transition-colors"
             >

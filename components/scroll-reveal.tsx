@@ -1,47 +1,82 @@
 "use client"
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Register ScrollTrigger plugin
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 interface ScrollRevealProps {
   children: React.ReactNode
-  className?: string
   delay?: number
+  className?: string
+  animation?: 'fadeUp' | 'fadeLeft' | 'fadeRight' | 'scale' | 'rotate'
+  duration?: number
 }
 
-export default function ScrollReveal({ children, className = '', delay = 0 }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+export default function ScrollReveal({ 
+  children, 
+  delay = 0, 
+  className = '', 
+  animation = 'fadeUp',
+  duration = 0.8
+}: ScrollRevealProps) {
+  const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            setIsVisible(true)
-          }, delay)
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    )
+    const element = elementRef.current
+    if (!element || typeof window === 'undefined') return
 
-    if (ref.current) {
-      observer.observe(ref.current)
+    // Set initial state based on animation type
+    const initialState = {
+      fadeUp: { y: 50, opacity: 0 },
+      fadeLeft: { x: -50, opacity: 0 },
+      fadeRight: { x: 50, opacity: 0 },
+      scale: { scale: 0.8, opacity: 0 },
+      rotate: { rotation: 10, opacity: 0 }
     }
+
+    const finalState = {
+      fadeUp: { y: 0, opacity: 1 },
+      fadeLeft: { x: 0, opacity: 1 },
+      fadeRight: { x: 0, opacity: 1 },
+      scale: { scale: 1, opacity: 1 },
+      rotate: { rotation: 0, opacity: 1 }
+    }
+
+    // Set initial state
+    gsap.set(element, initialState[animation])
+
+    // Create scroll trigger animation
+    gsap.to(element, {
+      ...finalState[animation],
+      duration,
+      delay,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: element,
+        start: "top 85%",
+        end: "bottom 15%",
+        toggleActions: "play none none reverse"
+      }
+    })
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
-      }
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === element) {
+          trigger.kill()
+        }
+      })
     }
-  }, [delay])
+  }, [delay, animation, duration])
 
   return (
     <div
-      ref={ref}
-      className={`scroll-reveal ${isVisible ? 'revealed' : ''} ${className}`}
+      ref={elementRef}
+      className={`scroll-reveal ${className}`}
     >
       {children}
     </div>

@@ -15,7 +15,12 @@ import dynamic from "next/dynamic"
 // Dynamically import map component to avoid SSR issues
 const GoogleMap = dynamic(() => import("@/components/google-map"), {
   ssr: false,
-  loading: () => <div className="h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">Loading map...</div>
+  loading: () => <div className="h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">
+    <div className="text-center space-y-2">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+      <p className="text-sm text-gray-600">Loading interactive map...</p>
+    </div>
+  </div>
 })
 
 interface NGOLocation {
@@ -382,16 +387,22 @@ export default function AdminSignupPage() {
                 <MapPin className="h-5 w-5" />
                 NGO Location *
               </CardTitle>
-              <CardDescription>Click on the map to select your NGO's location</CardDescription>
+              <CardDescription>
+                Click on the map to select your NGO's location. If the map doesn't load, use the coordinate inputs below.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="h-[400px] rounded-lg overflow-hidden border">
+                <div className="h-[400px] rounded-lg overflow-hidden border relative">
                   <GoogleMap
                     onMapClick={handleMapClick}
                     selectedLocation={selectedLocation}
                     showNGOs={false}
                   />
+                  {/* Fallback message overlay */}
+                  <div className="absolute top-2 right-2 bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs text-blue-700 max-w-xs">
+                    💡 <strong>Tip:</strong> If the map doesn't load, you can manually enter coordinates below
+                  </div>
                 </div>
 
                 {/* Manual coordinates input (fallback if map not visible) */}
@@ -421,12 +432,20 @@ export default function AdminSignupPage() {
                     />
                   </div>
                   <div className="flex items-end">
-                    <Button type="button" className="w-full" onClick={applyCoordsFromInput}>
-                      Set on Map
+                    <Button type="button" className="w-full bg-blue-600 hover:bg-blue-700" onClick={applyCoordsFromInput}>
+                      📍 Set Location
                     </Button>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500">Tip: If the map doesn’t load, you can still enter coordinates above. The location will be saved using these values.</p>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
+                  <div className="text-xs text-blue-700 space-y-1">
+                    <p>💡 <strong>How to find coordinates:</strong></p>
+                    <p>• Use Google Maps: Right-click → "What's here?" → Copy coordinates</p>
+                    <p>• Mumbai: 19.0760, 72.8777 | Delhi: 28.6139, 77.2090 | Bangalore: 12.9716, 77.5946</p>
+                  </div>
+                </div>
 
                 {selectedLocation && (
                   <div className="p-3 bg-green-50 border border-green-200 rounded-lg">

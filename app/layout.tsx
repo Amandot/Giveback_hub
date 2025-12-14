@@ -18,7 +18,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "GiveBack Hub - Empowering Communities, Changing Lives",
   description:
-    "Join us in creating lasting impact through community-driven projects that address real needs and build sustainable futures.",
+    "Join us in creating lasting impact through community-driven initiatives that address real needs and build sustainable futures.",
   generator: "v0.app",
 }
 

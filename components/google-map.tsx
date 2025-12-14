@@ -55,6 +55,7 @@ export default function GoogleMap({
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadedNGOs, setLoadedNGOs] = useState<NGO[]>([])
   const [selectedMarker, setSelectedMarker] = useState<any>(null)
+  const [loadError, setLoadError] = useState(false)
 
   // Fetch NGOs if not provided and showNGOs is true
   useEffect(() => {
@@ -75,13 +76,27 @@ export default function GoogleMap({
   useEffect(() => {
     // Load Google Maps script
     if (!window.google) {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      
+      if (!apiKey || apiKey === 'YOUR_API_KEY') {
+        console.warn('Google Maps API key not configured. Map functionality will be limited.')
+        // Still try to load with a placeholder key for development
+      }
+
       const script = document.createElement("script")
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY'}&callback=initMap`
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey || 'AIzaSyBHLett8djBo62dDXj0EjCpF8OK-1iSEhs'}&callback=initMap`
       script.async = true
       script.defer = true
 
       window.initMap = () => {
+        console.log('✅ Google Maps API loaded successfully')
         setIsLoaded(true)
+      }
+
+      script.onerror = () => {
+        console.error('❌ Failed to load Google Maps API - Check your API key and network connection')
+        setLoadError(true)
+        setIsLoaded(false)
       }
 
       document.head.appendChild(script)
@@ -290,6 +305,23 @@ export default function GoogleMap({
       })
     }
   }, [selectedNGO, markers])
+
+  if (loadError) {
+    return (
+      <div className="h-full min-h-[360px] bg-gradient-to-br from-yellow-50 to-orange-50 flex items-center justify-center border-2 border-dashed border-yellow-300 rounded-lg">
+        <div className="text-center space-y-4 p-6">
+          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto">
+            <MapPin className="h-8 w-8 text-yellow-600" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-yellow-800">Map Unavailable</h3>
+            <p className="text-yellow-700 text-sm">Google Maps couldn't load. Please use the coordinate inputs below.</p>
+            <p className="text-yellow-600 text-xs mt-2">You can still register by entering latitude and longitude manually.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   if (!isLoaded) {
     return (

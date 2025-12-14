@@ -196,18 +196,18 @@ export function UserDashboard() {
           </CardContent>
         </Card>
 
-        {/* Active Projects */}
+        {/* Community Impact */}
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">Community Impact</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">3</div>
-            <p className="text-xs text-muted-foreground">Active projects you're following</p>
+            <div className="text-2xl font-bold text-primary">5</div>
+            <p className="text-xs text-muted-foreground">Communities helped through your donations</p>
             <div className="mt-4">
               <Button variant="outline" size="sm" asChild className="w-full">
-                <Link href="/projects">View All Projects</Link>
+                <Link href="/map">Find NGOs</Link>
               </Button>
             </div>
           </CardContent>
@@ -341,9 +341,9 @@ export function UserDashboard() {
               </Link>
             </Button>
             <Button variant="outline" asChild className="h-24 flex-col space-y-2">
-              <Link href="/projects">
+              <Link href="/map">
                 <Users className="h-6 w-6" />
-                <span>Find Projects</span>
+                <span>Find NGOs</span>
               </Link>
             </Button>
             <Button variant="outline" asChild className="h-24 flex-col space-y-2">

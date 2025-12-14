@@ -104,7 +104,7 @@ export default function ProfilePage() {
               <span className="font-bold text-primary">$1,250.00</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm font-medium">Projects Supported</span>
+              <span className="text-sm font-medium">NGOs Supported</span>
               <span className="font-bold">5</span>
             </div>
             <div className="flex justify-between">
@@ -133,8 +133,8 @@ export default function ProfilePage() {
               <span className="text-sm text-muted-foreground">2 registered</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm font-medium">Following Projects</span>
-              <span className="text-sm text-muted-foreground">3 active</span>
+              <span className="text-sm font-medium">Following NGOs</span>
+              <span className="text-sm text-muted-foreground">3 organizations</span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm font-medium">Member Since</span>
