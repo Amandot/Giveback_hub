@@ -154,6 +154,11 @@ export async function POST(request: NextRequest) {
       donationData.quantity = quantity ? parseInt(quantity) : 1
       donationData.description = description ? description.trim() : itemName.trim()
       
+      // Add image URL if provided
+      if (body.imageUrl) {
+        donationData.imageUrl = body.imageUrl
+      }
+      
       // Add pickup service fields for item donations
       donationData.needsPickup = needsPickup || false
       if (needsPickup) {

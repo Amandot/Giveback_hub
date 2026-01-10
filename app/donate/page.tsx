@@ -12,15 +12,188 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
-import { CheckCircle, Package, Users, Heart, MapPin, Building, CreditCard, Gift, IndianRupee, Truck, Calendar, Clock } from 'lucide-react'
+import { CheckCircle, Package, Users, Heart, MapPin, Building, CreditCard, Gift, IndianRupee, Truck, Calendar, Clock, Sparkles, Upload, X, Loader2, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import dynamic from 'next/dynamic'
+import { Badge } from '@/components/ui/badge'
 
-// Dynamically import map to avoid SSR issues
-const GoogleMap = dynamic(() => import('@/components/google-map'), {
-  ssr: false,
-  loading: () => <div className="h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">Loading map...</div>
-})
+interface AIAnalysisResult {
+  valid: boolean
+  itemName?: string
+  category?: string
+  suggestedDescription?: string
+  message?: string
+}
+
+interface AIImageUploadProps {
+  onAnalysisComplete: (result: AIAnalysisResult) => void
+}
+
+function AIImageUpload({ onAnalysisComplete }: AIImageUploadProps) {
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>("")
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysisResult | null>(null)
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type and size
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.")
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      alert("Image size must be less than 5MB.")
+      return
+    }
+
+    setUploadedImage(file)
+    setImagePreview(URL.createObjectURL(file))
+    
+    // Start AI analysis
+    await analyzeImage(file)
+  }
+
+  const analyzeImage = async (file: File) => {
+    setIsAnalyzing(true)
+    setAiAnalysis(null)
+
+    try {
+      // Convert file to base64
+      const base64 = await fileToBase64(file)
+      
+      const response = await fetch('/api/analyze-item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageBase64: base64
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to analyze image')
+      }
+
+      setAiAnalysis(result)
+      onAnalysisComplete(result)
+
+    } catch (error) {
+      console.error('Error analyzing image:', error)
+      const errorResult = {
+        valid: false,
+        message: error instanceof Error ? error.message : 'Failed to analyze image. Please try again.'
+      }
+      setAiAnalysis(errorResult)
+      onAnalysisComplete(errorResult)
+    } finally {
+      setIsAnalyzing(false)
+    }
+  }
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = error => reject(error)
+    })
+  }
+
+  const removeImage = () => {
+    setUploadedImage(null)
+    setImagePreview("")
+    setAiAnalysis(null)
+  }
+
+  return (
+    <div className="space-y-4">
+      {!uploadedImage ? (
+        <div className="flex items-center justify-center w-full">
+          <label
+            htmlFor="ai-image-upload"
+            className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer bg-blue-50 hover:bg-blue-100 transition-colors"
+          >
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <Upload className="w-8 h-8 mb-2 text-blue-600" />
+              <p className="mb-2 text-sm text-blue-700">
+                <span className="font-semibold">Click to upload</span> your donation item photo
+              </p>
+              <p className="text-xs text-blue-600">PNG, JPG, JPEG up to 5MB</p>
+            </div>
+            <input
+              id="ai-image-upload"
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={isAnalyzing}
+            />
+          </label>
+        </div>
+      ) : (
+        <div className="relative">
+          <div className="aspect-video rounded-lg overflow-hidden bg-muted max-w-md mx-auto">
+            <img
+              src={imagePreview}
+              alt="Donation item"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={removeImage}
+            className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-2 hover:bg-destructive/90 transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
+      {/* AI Analysis Status */}
+      {isAnalyzing && (
+        <Alert className="border-blue-200 bg-blue-50">
+          <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+          <AlertDescription className="text-blue-800">
+            AI is analyzing your item... This may take a few seconds.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {aiAnalysis && !isAnalyzing && (
+        <Alert className={aiAnalysis.valid ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
+          {aiAnalysis.valid ? (
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          ) : (
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+          )}
+          <AlertDescription className={aiAnalysis.valid ? "text-green-800" : "text-red-800"}>
+            {aiAnalysis.valid ? (
+              <>
+                <strong>Great!</strong> AI identified your item as: <strong>{aiAnalysis.itemName}</strong>
+                <br />
+                Category: {aiAnalysis.category}
+                <br />
+                <span className="text-xs">Form fields have been auto-filled below. You can edit them if needed.</span>
+              </>
+            ) : (
+              <>
+                <strong>Invalid Item:</strong> {aiAnalysis.message}
+                <br />
+                <span className="text-xs">Please upload a clear photo of a physical item suitable for donation (clothes, books, toys, etc.)</span>
+              </>
+            )}
+          </AlertDescription>
+        </Alert>
+      )}
+    </div>
+  )
+}
 
 interface NGO {
   id: string
@@ -48,6 +221,7 @@ function DonatePageContent() {
   const [showMap, setShowMap] = useState(false)
 
   const [donationType, setDonationType] = useState<'money' | 'items'>('money')
+  const [aiFilledData, setAiFilledData] = useState<{itemName?: string, category?: string, description?: string}>({})
   const [formData, setFormData] = useState({
     // Common fields
     fullName: '',
@@ -156,6 +330,12 @@ function DonatePageContent() {
         return
       }
       
+      if (!formData.quantity.trim()) {
+        setErrorMessage('Please provide an item name/description.')
+        setSubmitStatus('error')
+        return
+      }
+      
       // Validate pickup service if needed
       if (formData.needsPickup) {
         if (!formData.pickupDate || !formData.pickupTime || !formData.pickupAddress.trim()) {
@@ -172,7 +352,6 @@ function DonatePageContent() {
           return
         }
       }
-      // Description is optional, but if no additional details, use category as description
     }
 
     setIsSubmitting(true)
@@ -191,9 +370,9 @@ function DonatePageContent() {
           ...(donationType === 'money' ? {
             amount: parseFloat(formData.customAmount || formData.amount)
           } : {
-            itemName: formData.category,
-            quantity: parseInt(formData.quantity.trim()) || 1,
-            description: formData.additionalDetails.trim() || formData.category,
+            itemName: formData.quantity.trim() || formData.category, // Use quantity field as item name
+            quantity: 1, // Default quantity
+            description: formData.additionalDetails.trim() || formData.quantity.trim() || formData.category,
             // Include pickup service data for items
             needsPickup: formData.needsPickup,
             ...(formData.needsPickup && {
@@ -418,7 +597,48 @@ function DonatePageContent() {
 
             {/* Items Donation Fields */}
             {donationType === 'items' && (
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* AI-Powered Image Upload Section */}
+                <div className="space-y-4">
+                  <Card className="border-blue-200 bg-blue-50/50">
+                    <CardContent className="pt-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Sparkles className="h-5 w-5 text-blue-600" />
+                        <Label className="text-base font-medium text-blue-900">
+                          AI-Powered Item Recognition
+                        </Label>
+                        <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800">
+                          Smart
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-sm text-blue-700 mb-4">
+                        Upload a photo of your donation item and our AI will automatically identify it and validate if it's suitable for donation.
+                      </p>
+
+                      <AIImageUpload 
+                        onAnalysisComplete={(result) => {
+                          if (result.valid) {
+                            setAiFilledData({
+                              itemName: result.itemName,
+                              category: result.category,
+                              description: result.suggestedDescription
+                            })
+                            setFormData(prev => ({
+                              ...prev,
+                              category: result.category || prev.category,
+                              quantity: result.itemName || prev.quantity,
+                              additionalDetails: result.suggestedDescription || prev.additionalDetails
+                            }))
+                          } else {
+                            setAiFilledData({})
+                          }
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+
                 <div>
                   <Label htmlFor="category">Donation Category *</Label>
                   <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
@@ -433,18 +653,29 @@ function DonatePageContent() {
                       ))}
                     </SelectContent>
                   </Select>
+                  {formData.category && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      ✨ {aiFilledData.category ? 'Auto-selected by AI' : 'Manually selected'}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <Label htmlFor="quantity">Quantity/Description</Label>
+                  <Label htmlFor="quantity">Item Name/Description *</Label>
                   <Input
                     id="quantity"
                     name="quantity"
-                    placeholder="e.g., 5 bags of clothes, 20 canned goods"
+                    placeholder="e.g., Blue Denim Jacket, Children's Books, Canned Food"
                     value={formData.quantity}
                     onChange={handleInputChange}
                     disabled={isSubmitting}
+                    required
                   />
+                  {formData.quantity && formData.quantity.length > 3 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      ✨ {aiFilledData.itemName ? 'Auto-filled by AI analysis' : 'Manually entered'}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -458,6 +689,11 @@ function DonatePageContent() {
                     rows={4}
                     disabled={isSubmitting}
                   />
+                  {formData.additionalDetails && formData.additionalDetails.length > 10 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      ✨ {aiFilledData.description ? 'Enhanced by AI analysis' : 'Manually entered'}
+                    </p>
+                  )}
                 </div>
 
                 {/* Pickup Service Section */}

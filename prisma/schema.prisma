@@ -84,6 +84,7 @@ model Donation {
   status        DonationStatus @default(PENDING)
   adminNotes    String?
   ngoId         String?
+  imageUrl      String?        // URL or base64 data for donation item image
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   needsPickup   Boolean        @default(false)

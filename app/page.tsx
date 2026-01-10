@@ -118,6 +118,45 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* AI Feature Highlight */}
+        {/* <div className="mt-16 animate-fade-in-up stagger-5">
+          <div className="glass-effect rounded-2xl p-8 max-w-4xl mx-auto bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Sparkles className="w-8 h-8 text-blue-600 animate-pulse" />
+              <h3 className="text-3xl font-bold text-gradient text-center-justify text-balance">
+                NEW: AI-Powered Donations
+              </h3>
+              <Sparkles className="w-8 h-8 text-purple-600 animate-pulse" />
+            </div>
+            <p className="text-lg text-muted-foreground mb-6 text-center text-center-justify text-readable text-pretty">
+              Upload a photo of your donation item and let our AI do the work! Powered by Google Gemini 1.5 Flash.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a 
+                href="/donate" 
+                className="btn-primary px-8 py-3 text-lg hover-zoom inline-flex items-center gap-2"
+              >
+                <Sparkles className="w-5 h-5" />
+                Donate Now (AI-Powered)
+              </a>
+            </div>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2 justify-center">
+                <CheckCircle className="w-4 h-4 text-green-600" />
+                <span className="text-muted-foreground">Auto-identifies items</span>
+              </div>
+              <div className="flex items-center gap-2 justify-center">
+                <CheckCircle className="w-4 h-4 text-green-600" />
+                <span className="text-muted-foreground">Fills form automatically</span>
+              </div>
+              <div className="flex items-center gap-2 justify-center">
+                <CheckCircle className="w-4 h-4 text-green-600" />
+                <span className="text-muted-foreground">Validates donations</span>
+              </div>
+            </div>
+          </div>
+        </div> */}
       </div>
     </div>
   )

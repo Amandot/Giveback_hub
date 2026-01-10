@@ -93,8 +93,17 @@ GiveBack Hub is a cutting-edge donation platform that bridges the gap between co
 - Category-based donation system
 - Quantity and description fields
 - Photo upload capabilities
+- **🤖 AI-Powered Item Analysis** (NEW!)
 
-#### **🚚 Pickup Service (Latest Feature)**
+#### **🤖 AI-Powered Donation Analysis (Latest Feature)**
+- **Smart Image Recognition**: Upload photos of donation items for automatic identification
+- **Gemini 1.5 Flash Integration**: Powered by Google's advanced AI model
+- **Automatic Form Filling**: AI identifies item name, category, and condition
+- **Validation System**: Rejects inappropriate or non-donation items
+- **User-Friendly Interface**: Simple upload → analyze → submit workflow
+- **Fallback Support**: Manual entry option if AI analysis fails
+
+#### **🚚 Pickup Service**
 - Schedule pickup date and time
 - Address specification
 - Special instructions for pickup team
@@ -200,6 +209,12 @@ giveback-hub/
    GOOGLE_CLIENT_ID="your-google-client-id-here"
    GOOGLE_CLIENT_SECRET="your-google-client-secret-here"
 
+   # Google Maps API Key (required for map functionality)
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-api-key"
+
+   # Google Gemini AI API Key (required for AI-powered donation analysis)
+   GEMINI_API_KEY="your-gemini-api-key"
+
    # Email (optional - can be configured later)
    EMAIL_SERVER_HOST="smtp.gmail.com"
    EMAIL_SERVER_PORT=587
@@ -229,7 +244,16 @@ giveback-hub/
 
 ## 🗄️ Recent Enhancements
 
-### **✨ UI/UX Improvements (Latest Update)**
+### **🤖 AI-Powered Donation Analysis (Latest Update)**
+
+- **Gemini 1.5 Flash Integration**: Advanced AI model for image recognition
+- **Smart Item Identification**: Automatically detects donation items from photos
+- **Auto-Form Filling**: AI fills item name, category, and description
+- **Content Validation**: Rejects inappropriate or non-donation content
+- **User Experience**: Simple upload → analyze → submit workflow
+- **Fallback Support**: Manual entry if AI analysis is unavailable
+
+### **✨ UI/UX Improvements**
 
 - **Enhanced Animations**: Integrated GSAP and Barba.js for smooth page transitions
 - **Smooth Scrolling**: Native CSS smooth scrolling with GSAP ScrollTrigger
@@ -265,9 +289,15 @@ giveback-hub/
 1. Visit `/auth/user-login`
 2. Sign in with Google or email/password
 3. Redirected to `/dashboard` (personalized)
-4. Click "Donate Now" or visit `/donate`
-5. Fill donation form (item, quantity, description)
-6. Receive email confirmation when status changes
+4. Click "🤖 AI Donate" or visit `/donate-ai` for AI-powered donations
+5. Upload photo of donation item → AI analyzes and fills form
+6. Review AI suggestions and submit donation
+7. Receive email confirmation when status changes
+
+**Alternative Flow (Traditional):**
+1. Click "Donate Now" or visit `/donate`
+2. Manually fill donation form (item, quantity, description)
+3. Submit and receive confirmation
 
 ### **For NGO Staff (Admins)**
 1. Visit `/auth/admin-login`
@@ -392,9 +422,10 @@ Once deployed, your platform will include:
 - **🏠 Landing Page** - Modern hero section with smooth animations
 - **🗺️ Interactive Map** - Discover NGOs by location
 - **💝 Donation System** - Support NGOs with money or items
-- **🚚 Pickup Service** - Schedule item pickups with tracking
-- **👥 User Dashboard** - Track donations and impact
+- **🤖 AI-Powered Donations** - Smart item analysis and form filling
+- **� Pickup Sebrvice** - Schedule item pickups with tracking
+- **� Useir Dashboard** - Track donations and impact
 - **📊 Admin Dashboard** - Comprehensive management tools
 - **🏢 NGO Management** - Complete NGO administration
-- **🔐 Secure Authentication** - Multiple login options
+- **� Securee Authentication** - Multiple login options
 - **📱 Mobile Responsive** - Perfect on all devices
