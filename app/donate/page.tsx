@@ -148,7 +148,8 @@ function AIImageUpload({ onAnalysisComplete }: AIImageUploadProps) {
           <button
             type="button"
             onClick={removeImage}
-            className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-2 hover:bg-destructive/90 transition-colors"
+            // className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-2 hover:bg-destructive/90 transition-colors"
+            className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-2 hover:bg-destructive/90 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>

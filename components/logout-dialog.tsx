@@ -127,10 +127,17 @@ export function LogoutDialog({
                 Signing out...
               </>
             ) : (
+              // <>
+              //   <LogOut className="mr-2 h-4 w-4" />
+              //   Sign out
+              // </>
               <>
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign out
-              </>
+  {/* Change icon color here (e.g., text-white, text-black, text-yellow-300) */}
+  <LogOut className="mr-2 h-4 w-4 text-white" />
+  
+  {/* Change text color here */}
+  <span className="text-white">Sign out</span>
+</>
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

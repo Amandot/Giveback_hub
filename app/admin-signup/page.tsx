@@ -13,7 +13,7 @@ import { toast } from "sonner"
 import dynamic from "next/dynamic"
 
 // Dynamically import map component to avoid SSR issues
-const GoogleMap = dynamic(() => import("@/components/google-map"), {
+const DynamicMap = dynamic(() => import("@/components/dynamic-map"), {
   ssr: false,
   loading: () => <div className="h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">
     <div className="text-center space-y-2">
@@ -64,24 +64,40 @@ export default function AdminSignupPage() {
     setSelectedLocation(location)
     setLatInput(location.lat.toString())
     setLngInput(location.lng.toString())
-    // Optionally reverse geocode to get address
-    if (window.google?.maps) {
-      const geocoder = new window.google.maps.Geocoder()
-      geocoder.geocode(
-        { location: { lat: location.lat, lng: location.lng } },
-        (results: any, status: any) => {
-          if (status === 'OK' && results?.[0]) {
-            setSelectedLocation({
-              ...location,
-              address: results[0].formatted_address
-            })
-            setFormData(prev => ({
-              ...prev,
-              address: results[0].formatted_address
-            }))
+    
+    // Use Nominatim (OpenStreetMap) for reverse geocoding
+    reverseGeocode(location.lat, location.lng)
+  }
+
+  // Reverse geocoding using Nominatim (free OpenStreetMap service)
+  const reverseGeocode = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'Giveback-Hub-App/1.0'
           }
         }
       )
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.display_name) {
+          setSelectedLocation(prev => prev ? {
+            ...prev,
+            address: data.display_name
+          } : { lat, lng, address: data.display_name })
+          
+          setFormData(prev => ({
+            ...prev,
+            address: data.display_name
+          }))
+        }
+      }
+    } catch (error) {
+      console.log('Reverse geocoding failed:', error)
+      // Silently fail - not critical functionality
     }
   }
 
@@ -103,19 +119,8 @@ export default function AdminSignupPage() {
     const loc = { lat, lng }
     setSelectedLocation(loc)
 
-    // Try reverse geocoding to populate address
-    if (window.google?.maps) {
-      const geocoder = new window.google.maps.Geocoder()
-      geocoder.geocode(
-        { location: { lat, lng } },
-        (results: any, status: any) => {
-          if (status === 'OK' && results?.[0]) {
-            setSelectedLocation({ ...loc, address: results[0].formatted_address })
-            setFormData(prev => ({ ...prev, address: results[0].formatted_address }))
-          }
-        }
-      )
-    }
+    // Use Nominatim for reverse geocoding
+    reverseGeocode(lat, lng)
   }
 
   const validateForm = () => {
@@ -394,7 +399,7 @@ export default function AdminSignupPage() {
             <CardContent>
               <div className="space-y-4">
                 <div className="h-[400px] rounded-lg overflow-hidden border relative">
-                  <GoogleMap
+                  <DynamicMap
                     onMapClick={handleMapClick}
                     selectedLocation={selectedLocation}
                     showNGOs={false}

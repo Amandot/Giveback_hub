@@ -48,7 +48,7 @@ In Vercel project settings → Environment Variables, add:
 DATABASE_URL=postgresql://[from-vercel-postgres]
 NEXTAUTH_URL=https://your-app-name.vercel.app
 NEXTAUTH_SECRET=Z8g3bfE9rjRq7wFkyMT20RWA3W2GpZYMn76j7nfC6Ow=
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyBHLett8djBo62dDXj0EjCpF8OK-1iSEhs
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyBHLett8djBo62dDXj0EjCpF8OK-1iSEhs  # Optional - now using OpenStreetMap
 ADMIN_SECRET_KEY=GIVEBACK_ADMIN_2024_SECRET
 ```
 
@@ -102,10 +102,10 @@ npx prisma migrate deploy
 - Redeploy after adding new environment variables
 - Check variable names match exactly (case-sensitive)
 
-#### 4. **Google Maps Not Loading**
-- Verify `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set
-- Check Google Cloud Console for API key restrictions
-- Ensure Maps JavaScript API is enabled
+#### 4. **OpenStreetMap Loading Issues**
+- Maps now use free OpenStreetMap service via Leaflet
+- No API key required - should work out of the box
+- If maps don't load, check browser console for network errors
 
 #### 5. **Authentication Issues**
 - Update `NEXTAUTH_URL` to match your Vercel domain
@@ -133,7 +133,7 @@ Visit: `https://your-app.vercel.app/admin-signup`
 
 ### Production Security:
 1. **Change Default Secrets**: Update `ADMIN_SECRET_KEY` and `NEXTAUTH_SECRET`
-2. **API Key Restrictions**: Restrict Google Maps API key to your domain
+2. **OpenStreetMap Integration**: Free map service with no API restrictions
 3. **Database Security**: Use strong passwords and enable SSL
 4. **Environment Variables**: Never commit secrets to Git
 

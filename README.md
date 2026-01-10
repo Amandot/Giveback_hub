@@ -32,7 +32,7 @@ GiveBack Hub is a cutting-edge donation platform that bridges the gap between co
 - **Language:** TypeScript
 - **UI Library:** React 18
 - **Styling:** Tailwind CSS + Radix UI Components
-- **Maps:** Google Maps API Integration
+- **Maps:** OpenStreetMap with Leaflet Integration
 - **Animations:** GSAP + Barba.js + Custom CSS Animations
 - **Smooth Scrolling:** Native CSS + GSAP ScrollTrigger
 
@@ -180,7 +180,7 @@ giveback-hub/
 ### **Prerequisites**
 - Node.js 18+ and npm
 - Git
-- Google Maps API key (for map features)
+- OpenStreetMap and Leaflet (for map features)
 
 ### **Installation**
 
@@ -209,8 +209,8 @@ giveback-hub/
    GOOGLE_CLIENT_ID="your-google-client-id-here"
    GOOGLE_CLIENT_SECRET="your-google-client-secret-here"
 
-   # Google Maps API Key (required for map functionality)
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-api-key"
+   # Google Maps API Key (optional - now using OpenStreetMap)
+   # NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-api-key"
 
    # Google Gemini AI API Key (required for AI-powered donation analysis)
    GEMINI_API_KEY="your-gemini-api-key"
@@ -380,7 +380,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for the styling system
 - **Radix UI** for accessible components
 - **GSAP** for smooth animations
-- **Google Maps Platform** for location services
+- **OpenStreetMap & Leaflet** for interactive maps
 - All the **NGOs** and **communities** that inspired this project
 
 ---
@@ -404,7 +404,7 @@ This project is optimized for Vercel deployment with zero configuration:
 ### **Production Requirements:**
 - **Database:** PostgreSQL (Vercel Postgres recommended)
 - **Environment Variables:** All variables from `.env.example`
-- **Google Maps API Key:** Required for map functionality
+- **OpenStreetMap Integration:** Free map service with Leaflet
 - **Domain:** Custom domain supported
 
 ### **Post-Deployment:**
