@@ -14,9 +14,17 @@ export function Navigation() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-primary smooth-hover hover:scale-105">
-              GiveBack Hub
-            </Link>
+            {/* <Link href="/" className="text-2xl font-bold text-primary smooth-hover hover:scale-105">
+              <img src="/give back.png" alt="Logo" className="h-8 w-8" /> GiveBack Hub
+            </Link> */}
+            <Link 
+  href="/dashboard" 
+  className="text-2xl font-bold text-primary smooth-hover hover:scale-105 flex items-center gap-2"
+>
+  {/* changed Link to img, fixed path, added alt text */}
+  <img src="/give back.png" alt="Logo" className="h-8 w-8" />
+  GiveBack Hub
+</Link>
           </div>
 
           {/* Desktop Navigation */}

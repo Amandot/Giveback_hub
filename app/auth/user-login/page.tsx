@@ -91,7 +91,8 @@ export default function UserLoginPage() {
         <div className="text-center animate-fade-in-up">
           <div className="flex items-center justify-center mb-4">
             <div className="p-3 bg-primary/10 rounded-full">
-              <Heart className="h-12 w-12 text-primary" />
+              {/* <Heart className="h-12 w-12 text-primary" /> */}
+              <img src="/give back.png" alt="Logo" className="h-25 w-25" />
             </div>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
