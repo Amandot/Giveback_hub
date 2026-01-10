@@ -73,10 +73,18 @@ export function DashboardNav() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/dashboard" className="text-2xl font-bold text-primary smooth-hover hover:scale-105 flex items-center gap-2">
-              <Heart className="h-8 w-8" />
+            {/* <Link href="/dashboard" className="text-2xl font-bold text-primary smooth-hover hover:scale-105 flex items-center gap-2">
+              <Link href="/public/give back.png className="h-8 w-8" />
               GiveBack Hub
-            </Link>
+            </Link> */}
+            <Link 
+  href="/dashboard" 
+  className="text-2xl font-bold text-primary smooth-hover hover:scale-105 flex items-center gap-2"
+>
+  {/* changed Link to img, fixed path, added alt text */}
+  <img src="/give back.png" alt="Logo" className="h-8 w-8" />
+  GiveBack Hub
+</Link>
           </div>
 
           {/* Desktop Navigation */}

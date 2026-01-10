@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator Instructions</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .step { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        code { background: #e0e0e0; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>GiveBack Hub - Favicon Setup Instructions</h1>
+    
+    <div class="step">
+        <h3>Step 1: Prepare Your Logo</h3>
+        <p>Use your existing <code>public/give back.png</code> file as the source image.</p>
+        <p>For best results, make sure it's square (same width and height) and at least 512x512 pixels.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 2: Generate Favicon Files (Choose one method)</h3>
+        
+        <h4>Method A: Online Generator (Recommended)</h4>
+        <ol>
+            <li>Go to <a href="https://favicon.io/favicon-converter/" target="_blank">favicon.io/favicon-converter/</a></li>
+            <li>Upload your <code>give back.png</code> file</li>
+            <li>Download the generated favicon package</li>
+            <li>Extract and copy the files to your project</li>
+        </ol>
+
+        <h4>Method B: RealFaviconGenerator (Advanced)</h4>
+        <ol>
+            <li>Go to <a href="https://realfavicongenerator.net/" target="_blank">realfavicongenerator.net</a></li>
+            <li>Upload your logo and customize settings</li>
+            <li>Generate and download the package</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>Step 3: Copy Files to Your Project</h3>
+        <p>After generating, copy these files to your project:</p>
+        <ul>
+            <li><code>favicon.ico</code> → <code>public/favicon.ico</code></li>
+            <li><code>icon-16x16.png</code> → <code>public/icons/icon-16x16.png</code></li>
+            <li><code>icon-32x32.png</code> → <code>public/icons/icon-32x32.png</code></li>
+            <li><code>apple-touch-icon.png</code> → <code>public/icons/apple-touch-icon.png</code></li>
+            <li>All other icon sizes → <code>public/icons/</code></li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h3>Step 4: Verify Setup</h3>
+        <p>After copying the files:</p>
+        <ol>
+            <li>Start your development server: <code>npm run dev</code></li>
+            <li>Open your browser and check if the favicon appears in the tab</li>
+            <li>Test on mobile devices for app icons</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>Required Files Structure</h3>
+        <pre>
+public/
+├── favicon.ico
+├── icons/
+│   ├── icon-16x16.png
+│   ├── icon-32x32.png
+│   ├── icon-72x72.png
+│   ├── icon-96x96.png
+│   ├── icon-128x128.png
+│   ├── icon-144x144.png
+│   ├── icon-152x152.png
+│   ├── icon-192x192.png
+│   ├── icon-384x384.png
+│   ├── icon-512x512.png
+│   └── apple-touch-icon.png
+        </pre>
+    </div>
+</body>
+</html>
