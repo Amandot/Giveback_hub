@@ -356,23 +356,6 @@ ADMIN_SECRET_KEY="your-admin-creation-secret"
 
 ---
 
-## 📞 Support
-
-For issues or questions:
-1. Check the console for error messages
-2. Verify all environment variables are set correctly
-3. Ensure database is running and accessible
-4. Check email configuration if notifications aren't working
-
----
-
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👏 Acknowledgements
 
 - **Next.js** team for the amazing framework
