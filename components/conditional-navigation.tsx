@@ -9,7 +9,10 @@ export function ConditionalNavigation() {
   const { data: session, status } = useSession()
   const pathname = usePathname()
 
-
+  // Don't show navigation on admin routes
+  if (pathname.startsWith("/admin")) {
+    return null
+  }
 
   // Loading state - show a minimal loading nav
   if (status === "loading") {

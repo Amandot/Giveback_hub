@@ -324,7 +324,7 @@ export function UserDashboard() {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
+      {/* Quick Actions
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
@@ -360,7 +360,7 @@ export function UserDashboard() {
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
 
     </div>

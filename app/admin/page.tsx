@@ -446,7 +446,7 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      {/* User Distribution Map */}
+      {/* User Distribution Map
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
         <CardContent>
           <UserMap users={users} />
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 
