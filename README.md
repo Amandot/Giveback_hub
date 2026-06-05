@@ -8,6 +8,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white)](https://greensock.com/)
 
+🌐 **Live Demo:** https://giveback-hub.vercel.app/
+
 ## 🎯 Project Overview
 
 GiveBack Hub is a cutting-edge donation platform that bridges the gap between compassionate donors and impactful NGOs. Built with modern web technologies, it features smooth animations, interactive maps, comprehensive donation management, and powerful administrative tools.
